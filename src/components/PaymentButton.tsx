@@ -57,7 +57,6 @@ export default function PaymentButton({ serviceId, title, price }: PaymentButton
       <div className="w-full">
         <Wallet 
           initialization={{ preferenceId }} 
-          customization={{ texts: { valueProp: 'smart_option' } }} 
         />
       </div>
     );
