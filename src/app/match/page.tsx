@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 import { Suspense, useState, useEffect } from "react";
 
-export default function MatchContent() {
+function MatchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const requestId = searchParams.get("id");
