@@ -32,6 +32,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 // Dados fictícios de crescimento para o investidor ver
 const growthData = [
