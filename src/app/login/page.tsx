@@ -104,6 +104,8 @@ export default function LoginPage() {
                 id="password" 
                 type="password" 
                 placeholder="••••••••" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="h-12"
               />
             </div>
