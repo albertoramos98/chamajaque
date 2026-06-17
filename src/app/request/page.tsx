@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useServiceStore, calculateServiceEstimate } from "@/store/serviceStore";
+import { useAuthStore } from "@/store/authStore";
 import { ServiceDetails, Address, PropertyType, CleaningLevel } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,13 +22,16 @@ import {
   Clock,
   Calendar,
   MapPin,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function RequestPage() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const addRequest = useServiceStore((state) => state.addRequest);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [step, setStep] = useState(1);
   const [details, setDetails] = useState<ServiceDetails>({
@@ -61,14 +65,28 @@ export default function RequestPage() {
   const handleNext = () => setStep(s => s + 1);
   const handleBack = () => setStep(s => s - 1);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Você precisa estar logado para solicitar um serviço.");
+      router.push("/login");
+      return;
+    }
+
     if (!address.street || !address.number || !schedule.date || !schedule.time) {
       toast.error("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
-    const id = addRequest(details, address, schedule.date, schedule.time);
-    toast.success("Solicitação criada com sucesso!");
-    router.push(`/match?id=${id}`);
+
+    setIsSubmitting(true);
+    const id = await addRequest(details, address, schedule.date, schedule.time, user.id);
+    
+    if (id) {
+      toast.success("Solicitação criada com sucesso!");
+      router.push(`/match?id=${id}`);
+    } else {
+      toast.error("Erro ao criar solicitação. Tente novamente.");
+      setIsSubmitting(false);
+    }
   };
 
   const toggleAdditional = (service: string) => {
@@ -318,9 +336,13 @@ export default function RequestPage() {
                 </Card>
 
                 <div className="flex justify-between pt-4">
-                  <Button variant="ghost" onClick={handleBack} className="h-14 px-10 rounded-full font-bold">Voltar</Button>
-                  <Button onClick={handleSubmit} className="bg-primary hover:opacity-90 h-14 px-14 rounded-full text-xl font-bold shadow-2xl shadow-primary/30">
-                    Confirmar e Chamar a Jaque!
+                  <Button variant="ghost" onClick={handleBack} disabled={isSubmitting} className="h-14 px-10 rounded-full font-bold">Voltar</Button>
+                  <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-primary hover:opacity-90 h-14 px-14 rounded-full text-xl font-bold shadow-2xl shadow-primary/30">
+                    {isSubmitting ? (
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                      "Confirmar e Chamar a Jaque!"
+                    )}
                   </Button>
                 </div>
               </motion.div>

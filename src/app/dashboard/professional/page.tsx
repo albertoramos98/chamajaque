@@ -23,23 +23,24 @@ import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ProfessionalDashboard() {
-  const [isMounted, setIsMounted] = useState(false);
   const user = useAuthStore((state) => state.user);
-  const allRequests = useServiceStore((state) => state.requests);
-  const myServices = useServiceStore((state) => state.getRequestsByProfessional(user?.id || ""));
-  
-  // Disponíveis: Sem profissional e status PENDING
-  const availableJobs = allRequests.filter(r => !r.professionalId && r.status === 'PENDING');
+  const { requests, isLoading, fetchAvailableRequests, fetchRequestsByClient } = useServiceStore();
   
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (user) {
+      fetchAvailableRequests();
+      // Em um app real, buscaríamos os aceitos por esse profissional especificamente
+    }
+  }, [user, fetchAvailableRequests]);
 
-  if (!isMounted) return null;
+  if (isLoading) return <div className="p-20 text-center">Carregando oportunidades...</div>;
 
   if (!user || user.role !== "PROFESSIONAL") {
     return redirect("/login");
   }
+
+  const myServices = requests.filter(r => r.professionalId === user.id);
+  const availableJobs = requests.filter(r => !r.professionalId && r.status === 'PENDING');
 
   const totalEarnings = myServices.reduce((acc, curr) => acc + curr.estimatedValue, 0);
 

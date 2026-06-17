@@ -2,27 +2,67 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/authStore";
+import { createClient } from "@/lib/supabase";
 import { UserRole } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, ArrowRight, User as UserIcon, Briefcase, ShieldCheck } from "lucide-react";
+import { Sparkles, ArrowRight, User as UserIcon, Briefcase, ShieldCheck, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
   const [role, setRole] = useState<UserRole>("CLIENT");
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    login("novo-usuario@email.com", role);
-    toast.success(`Conta criada com sucesso!`);
-    router.push(role === "CLIENT" ? "/dashboard/client" : "/dashboard/professional");
+    if (!formData.name || !formData.email || !formData.password) {
+      toast.error("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    setIsLoading(true);
+    const supabase = createClient();
+
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (signUpError) throw signUpError;
+      if (!data.user) throw new Error("Erro ao criar usuário.");
+
+      // Criar o perfil na tabela 'profiles'
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: data.user.id,
+            name: formData.name,
+            email: formData.email,
+            role: role,
+          }
+        ]);
+
+      if (profileError) throw profileError;
+
+      toast.success(`Conta criada com sucesso!`);
+      router.push(role === "CLIENT" ? "/dashboard/client" : "/dashboard/professional");
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao criar conta.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -77,23 +117,34 @@ export default function RegisterPage() {
             </Tabs>
 
             <form onSubmit={handleRegister} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nome</Label>
-                  <Input id="name" placeholder="Seu nome" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="surname">Sobrenome</Label>
-                  <Input id="surname" placeholder="Sobrenome" />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Nome Completo</Label>
+                <Input 
+                  id="name" 
+                  placeholder="Seu nome" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" placeholder="exemplo@email.com" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="exemplo@email.com" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Senha</Label>
-                <Input id="password" type="password" placeholder="Mínimo 8 caracteres" />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="Mínimo 6 caracteres" 
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
               </div>
               
               <p className="text-[10px] text-slate-400 leading-tight">
@@ -101,8 +152,12 @@ export default function RegisterPage() {
                 e reconhece que a Chama Jaque é uma plataforma de intermediação baseada no respeito mútuo.
               </p>
 
-              <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700 h-14 text-lg rounded-full font-bold">
-                Criar minha conta <ArrowRight className="ml-2 w-5 h-5" />
+              <Button type="submit" disabled={isLoading} className="w-full bg-orange-600 hover:bg-orange-700 h-14 text-lg rounded-full font-bold">
+                {isLoading ? (
+                  <Loader2 className="w-6 h-6 animate-spin" />
+                ) : (
+                  <>Criar minha conta <ArrowRight className="ml-2 w-5 h-5" /></>
+                )}
               </Button>
             </form>
 

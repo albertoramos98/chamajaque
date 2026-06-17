@@ -33,15 +33,27 @@ const statusConfig: Record<ServiceStatus, { label: string; color: string }> = {
 import { useEffect, useState } from "react";
 
 export default function ClientDashboard() {
-  const [isMounted, setIsMounted] = useState(false);
   const user = useAuthStore((state) => state.user);
-  const requests = useServiceStore((state) => state.getRequestsByClient(user?.id || ""));
+  const { requests, isLoading, fetchRequestsByClient } = useServiceStore();
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    let isSubscribed = true;
+    
+    if (user?.id) {
+      fetchRequestsByClient(user.id);
+    }
 
-  if (!isMounted) return null;
+    return () => { isSubscribed = false; };
+  }, [user?.id, fetchRequestsByClient]);
+
+  if (isLoading) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-slate-500 font-medium">Sincronizando seus dados...</p>
+      </div>
+    </div>
+  );
 
   if (!user || user.role !== "CLIENT") {
     return redirect("/login");

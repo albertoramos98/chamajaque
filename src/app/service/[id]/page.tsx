@@ -29,33 +29,47 @@ export default function ServicePage() {
   const { id } = useParams();
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
-  const getRequestById = useServiceStore((state) => state.getRequestById);
-  const updateStatus = useServiceStore((state) => state.updateStatus);
-  const assignProfessional = useServiceStore((state) => state.assignProfessional);
+  const { fetchRequestById, updateStatus, assignProfessional } = useServiceStore();
+  const [service, setService] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const service = getRequestById(id as string);
-  const prof = MOCK_PROFESSIONALS.find(p => p.id === service?.professionalId);
+  useEffect(() => {
+    const loadService = async () => {
+      if (id) {
+        const data = await fetchRequestById(id as string);
+        setService(data);
+        setIsLoading(false);
+      }
+    };
+    loadService();
+  }, [id, fetchRequestById]);
 
+  if (isLoading) return <div className="p-20 text-center">Carregando detalhes do serviço...</div>;
   if (!service) return <div className="p-20 text-center">Serviço não encontrado.</div>;
+
+  const prof = MOCK_PROFESSIONALS.find(p => p.id === service.professionalId);
 
   const isClient = user?.role === 'CLIENT';
   const isProf = user?.role === 'PROFESSIONAL';
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     if (user) {
-      assignProfessional(service.id, user.id);
+      await assignProfessional(service.id, user.id);
       toast.success("Você aceitou este serviço! Prepare seus materiais.");
+      setService({ ...service, professionalId: user.id, status: 'ACCEPTED' });
     }
   };
 
-  const handleStart = () => {
-    updateStatus(service.id, 'IN_PROGRESS');
+  const handleStart = async () => {
+    await updateStatus(service.id, 'IN_PROGRESS');
     toast.info("Serviço iniciado! Bom trabalho.");
+    setService({ ...service, status: 'IN_PROGRESS' });
   };
 
-  const handleFinish = () => {
-    updateStatus(service.id, 'COMPLETED');
+  const handleFinish = async () => {
+    await updateStatus(service.id, 'COMPLETED');
     toast.success("Serviço finalizado com sucesso! O cliente será notificado.");
+    setService({ ...service, status: 'COMPLETED' });
     router.push('/dashboard/professional');
   };
 

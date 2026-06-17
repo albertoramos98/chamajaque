@@ -1,32 +1,48 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { User, UserRole } from '@/types';
+import { createClient } from '@/lib/supabase';
 
 interface AuthState {
   user: User | null;
-  login: (email: string, role: UserRole) => void;
-  logout: () => void;
+  isLoading: boolean;
+  setUser: (user: User | null) => void;
+  fetchProfile: (id: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      login: (email, role) => {
-        // Simulação de login
-        const mockUser: User = {
-          id: role === 'CLIENT' ? 'client-1' : 'prof-1',
-          name: role === 'CLIENT' ? 'Cliente Exemplo' : 'Jaqueline Silva',
-          email: email,
-          role: role,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`,
-        };
-        set({ user: mockUser });
-      },
-      logout: () => set({ user: null }),
-    }),
-    {
-      name: 'chama-jaque-auth',
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isLoading: true,
+  setUser: (user) => set({ user, isLoading: false }),
+  fetchProfile: async (id) => {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (data && !error) {
+      set({
+        user: {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          role: data.role as UserRole,
+          avatar: data.avatar_url,
+          phone: data.phone,
+          rating: data.rating,
+          totalServices: data.total_services,
+        },
+        isLoading: false,
+      });
+    } else {
+      set({ isLoading: false });
     }
-  )
-);
+  },
+  logout: async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    set({ user: null, isLoading: false });
+  },
+}));

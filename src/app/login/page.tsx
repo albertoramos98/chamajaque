@@ -2,32 +2,57 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/authStore";
+import { createClient } from "@/lib/supabase";
 import { UserRole } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Sparkles, ArrowRight, User as UserIcon, Briefcase } from "lucide-react";
+import { Sparkles, ArrowRight, User as UserIcon, Briefcase, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRole>("CLIENT");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) {
-      toast.error("Por favor, insira seu e-mail.");
+    if (!email || !password) {
+      toast.error("Por favor, preencha todos os campos.");
       return;
     }
-    login(email, role);
-    toast.success(`Bem-vindo de volta!`);
-    router.push(role === "CLIENT" ? "/dashboard/client" : "/dashboard/professional");
+
+    setIsLoading(true);
+    const supabase = createClient();
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      // Buscar o perfil para confirmar o role
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      toast.success(`Bem-vindo de volta!`);
+      const userRole = profile?.role || role;
+      router.push(userRole === "CLIENT" ? "/dashboard/client" : "/dashboard/professional");
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao entrar. Verifique suas credenciais.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,8 +100,12 @@ export default function LoginPage() {
                 className="h-12"
               />
             </div>
-            <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700 h-12 text-lg rounded-full font-bold">
-              Entrar <ArrowRight className="ml-2 w-5 h-5" />
+            <Button type="submit" disabled={isLoading} className="w-full bg-orange-600 hover:bg-orange-700 h-12 text-lg rounded-full font-bold">
+              {isLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin" />
+              ) : (
+                <>Entrar <ArrowRight className="ml-2 w-5 h-5" /></>
+              )}
             </Button>
           </form>
 
