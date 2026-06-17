@@ -71,28 +71,40 @@ export default function AdminDashboard() {
   const [generatingLink, setGeneratingLink] = useState<string | null>(null);
 
   async function fetchAdminStats() {
-    const supabase = createClient();
-    
-    // Stats
-    const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-    const { count: servicesCount } = await supabase.from('service_requests').select('*', { count: 'exact', head: true });
-    const { data: revenueData } = await supabase.from('service_requests').select('estimated_value').eq('status', 'COMPLETED');
-    
-    // Professionals List
-    const { data: profs } = await supabase.from('profiles').select('*').eq('role', 'PROFESSIONAL');
-    
-    const revenue = revenueData?.reduce((acc, curr) => acc + Number(curr.estimated_value), 0) || 0;
-    
-    setProfessionals(profs || []);
-    setStats({
-      totalUsers: usersCount || 0,
-      totalServices: servicesCount || 0,
-      totalRevenue: revenue,
-      activeProfessionals: profs?.length || 0,
-      averageTicket: servicesCount ? Math.round(revenue / servicesCount) : 0,
-      conversionRate: '12.2%'
-    });
-    setLoading(false);
+    try {
+      const supabase = createClient();
+      
+      // Stats
+      const { count: usersCount, error: usersError } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+      if (usersError) console.error("Admin Fetch Error (Users):", usersError);
+
+      const { count: servicesCount, error: servicesError } = await supabase.from('service_requests').select('*', { count: 'exact', head: true });
+      if (servicesError) console.error("Admin Fetch Error (Services):", servicesError);
+
+      const { data: revenueData, error: revenueError } = await supabase.from('service_requests').select('estimated_value').eq('status', 'COMPLETED');
+      if (revenueError) console.error("Admin Fetch Error (Revenue):", revenueError);
+      
+      // Professionals List
+      const { data: profs, error: profsError } = await supabase.from('profiles').select('*').eq('role', 'PROFESSIONAL');
+      if (profsError) console.error("Admin Fetch Error (Profs):", profsError);
+      
+      const revenue = revenueData?.reduce((acc, curr) => acc + Number(curr.estimated_value), 0) || 0;
+      
+      setProfessionals(profs || []);
+      setStats({
+        totalUsers: usersCount || 0,
+        totalServices: servicesCount || 0,
+        totalRevenue: revenue,
+        activeProfessionals: profs?.length || 0,
+        averageTicket: servicesCount ? Math.round(revenue / servicesCount) : 0,
+        conversionRate: '12.2%'
+      });
+    } catch (err) {
+      console.error("Critical error in fetchAdminStats:", err);
+      toast.error("Erro ao carregar dados do painel.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleVerify = async (id: string, status: string) => {
