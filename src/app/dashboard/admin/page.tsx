@@ -15,7 +15,8 @@ import {
   Star,
   Activity,
   Layers,
-  LayoutDashboard
+  LayoutDashboard,
+  AlertCircle
 } from "lucide-react";
 import { 
   AreaChart, 
