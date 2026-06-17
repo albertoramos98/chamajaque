@@ -23,7 +23,7 @@ import {
   Star
 } from "lucide-react";
 import { toast } from "sonner";
-import { ServiceStatus } from "@/types";
+import { ServiceStatus, ServiceRequest } from "@/types";
 import PaymentButton from "@/components/PaymentButton";
 
 export default function ServicePage() {
@@ -31,7 +31,7 @@ export default function ServicePage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const { fetchRequestById, updateStatus, assignProfessional } = useServiceStore();
-  const [service, setService] = useState<any>(null);
+  const [service, setService] = useState<ServiceRequest | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
