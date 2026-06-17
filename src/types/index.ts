@@ -9,6 +9,9 @@ export interface User {
   phone?: string;
   rating?: number;
   totalServices?: number;
+  introLetter?: string;
+  documentStatus?: 'PENDING' | 'VERIFIED' | 'REJECTED';
+  lgpdConsent?: boolean;
 }
 
 export interface Address {

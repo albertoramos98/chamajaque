@@ -64,28 +64,65 @@ export default function AdminDashboard() {
     conversionRate: '8.4%'
   });
   const [loading, setLoading] = useState(true);
+  const [professionals, setProfessionals] = useState<any[]>([]);
+  const [generatingLink, setGeneratingLink] = useState<string | null>(null);
+
+  async function fetchAdminStats() {
+    const supabase = createClient();
+    
+    // Stats
+    const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+    const { count: servicesCount } = await supabase.from('service_requests').select('*', { count: 'exact', head: true });
+    const { data: revenueData } = await supabase.from('service_requests').select('estimated_value').eq('status', 'COMPLETED');
+    
+    // Professionals List
+    const { data: profs } = await supabase.from('profiles').select('*').eq('role', 'PROFESSIONAL');
+    
+    const revenue = revenueData?.reduce((acc, curr) => acc + Number(curr.estimated_value), 0) || 0;
+    
+    setProfessionals(profs || []);
+    setStats({
+      totalUsers: usersCount || 0,
+      totalServices: servicesCount || 0,
+      totalRevenue: revenue,
+      activeProfessionals: profs?.length || 0,
+      averageTicket: servicesCount ? Math.round(revenue / servicesCount) : 0,
+      conversionRate: '12.2%'
+    });
+    setLoading(false);
+  }
+
+  const handleVerify = async (id: string, status: string) => {
+    const supabase = createClient();
+    await supabase.from('profiles').update({ document_status: status }).eq('id', id);
+    toast.success(`Status de verificação atualizado!`);
+    fetchAdminStats();
+  };
+
+  const generateExpiringLink = async (profileId: string) => {
+    setGeneratingLink(profileId);
+    try {
+      const res = await fetch('/api/admin/generate-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileId })
+      });
+      const data = await res.json();
+      if (data.link) {
+        navigator.clipboard.writeText(data.link);
+        toast.success("Link copiado! Expira em 5 min.", {
+          description: data.link,
+          duration: 10000,
+        });
+      }
+    } catch (e) {
+      toast.error("Erro ao gerar link.");
+    } finally {
+      setGeneratingLink(null);
+    }
+  };
 
   useEffect(() => {
-    async function fetchAdminStats() {
-      const supabase = createClient();
-      
-      const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-      const { count: servicesCount } = await supabase.from('service_requests').select('*', { count: 'exact', head: true });
-      const { data: revenueData } = await supabase.from('service_requests').select('estimated_value').eq('status', 'COMPLETED');
-      
-      const revenue = revenueData?.reduce((acc, curr) => acc + Number(curr.estimated_value), 0) || 0;
-      
-      setStats({
-        totalUsers: usersCount || 0,
-        totalServices: servicesCount || 0,
-        totalRevenue: revenue,
-        activeProfessionals: Math.round((usersCount || 0) * 0.4), // Estimativa para o dashboard
-        averageTicket: servicesCount ? Math.round(revenue / servicesCount) : 0,
-        conversionRate: '12.2%'
-      });
-      setLoading(false);
-    }
-
     if (user?.email === "albertinhorss@gmail.com" || user?.role === 'ADMIN') {
       fetchAdminStats();
     } else if (user) {
@@ -224,7 +261,93 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Lower Section: Recent Users & Services */}
+        {/* Professionals Management Section */}
+        <Card className="shadow-sm border-none">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-primary" />
+                Gestão de Profissionais e Segurança
+              </CardTitle>
+              <CardDescription>Verificação de documentos e controle de acesso seguro</CardDescription>
+            </div>
+            <div className="text-xs bg-amber-50 text-amber-700 p-2 rounded-lg flex items-center gap-2 border border-amber-100">
+               <AlertCircle className="w-4 h-4" /> LGPD: Dados sensíveis protegidos por criptografia de banco.
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left">
+                <thead>
+                  <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
+                    <th className="px-4 py-4">Profissional</th>
+                    <th className="px-4 py-4">Status Doc.</th>
+                    <th className="px-4 py-4">Localização</th>
+                    <th className="px-4 py-4 text-right">Ações de Segurança</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {professionals.map((prof) => (
+                    <tr key={prof.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-3">
+                           <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary text-xs">
+                             {prof.name[0]}
+                           </div>
+                           <div>
+                              <p className="font-bold text-slate-900">{prof.name}</p>
+                              <p className="text-[10px] text-slate-400">{prof.email}</p>
+                           </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <Badge className={`
+                          ${prof.document_status === 'VERIFIED' ? 'bg-green-100 text-green-700' : 
+                            prof.document_status === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 
+                            'bg-amber-100 text-amber-700'} border-none text-[10px]
+                        `}>
+                          {prof.document_status === 'VERIFIED' ? 'Verificado' : 
+                           prof.document_status === 'REJECTED' ? 'Negado' : 'Pendente'}
+                        </Badge>
+                      </td>
+                      <td className="px-4 py-4 text-slate-500">{prof.location || 'Não informado'}</td>
+                      <td className="px-4 py-4 text-right">
+                        <div className="flex justify-end gap-2">
+                           <Button 
+                             variant="outline" 
+                             size="sm" 
+                             className="h-8 text-[10px] font-bold rounded-full gap-1 border-blue-200 text-blue-600 hover:bg-blue-50"
+                             onClick={() => generateExpiringLink(prof.id)}
+                             disabled={generatingLink === prof.id}
+                           >
+                              {generatingLink === prof.id ? 'Gerando...' : 'Link 5 min'}
+                           </Button>
+                           <Button 
+                             variant="outline" 
+                             size="sm" 
+                             className="h-8 text-[10px] font-bold rounded-full border-green-200 text-green-600 hover:bg-green-50"
+                             onClick={() => handleVerify(prof.id, 'VERIFIED')}
+                           >
+                             Aprovar
+                           </Button>
+                           <Button 
+                             variant="outline" 
+                             size="sm" 
+                             className="h-8 text-[10px] font-bold rounded-full border-rose-200 text-rose-600 hover:bg-rose-50"
+                             onClick={() => handleVerify(prof.id, 'REJECTED')}
+                           >
+                             Negar
+                           </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
            <Card className="shadow-sm border-none">
               <CardHeader className="flex flex-row items-center justify-between">

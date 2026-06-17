@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import AuthProvider from "@/components/AuthProvider";
+import { LGPDBanner } from "@/components/LGPDBanner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-montserrat" });
@@ -29,6 +30,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </AuthProvider>
+        <LGPDBanner />
         <Toaster position="top-center" richColors />
       </body>
     </html>
