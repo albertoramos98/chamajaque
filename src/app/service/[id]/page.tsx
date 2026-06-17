@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useServiceStore } from "@/store/serviceStore";
 import { MOCK_PROFESSIONALS } from "@/lib/mocks";
