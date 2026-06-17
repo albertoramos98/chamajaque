@@ -18,23 +18,35 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 
-function MatchContent() {
+export default function MatchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const requestId = searchParams.get("id");
-  const getRequestById = useServiceStore((state) => state.getRequestById);
-  const assignProfessional = useServiceStore((state) => state.assignProfessional);
+  const { fetchRequestById, assignProfessional } = useServiceStore();
+  const [request, setRequest] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const request = requestId ? getRequestById(requestId) : null;
+  useEffect(() => {
+    const loadRequest = async () => {
+      if (requestId) {
+        const data = await fetchRequestById(requestId);
+        setRequest(data);
+      }
+      setIsLoading(false);
+    };
+    loadRequest();
+  }, [requestId, fetchRequestById]);
 
-  const handleChoose = (profId: string, profName: string) => {
+  const handleChoose = async (profId: string, profName: string) => {
     if (!requestId) return;
-    assignProfessional(requestId, profId);
+    await assignProfessional(requestId, profId);
     toast.success(`Você escolheu a ${profName}! Ela foi notificada.`);
     router.push(`/dashboard/client`);
   };
+
+  if (isLoading) return <div className="p-20 text-center text-slate-500 font-medium">Buscando detalhes do seu pedido...</div>;
 
   if (!request) {
     return (
