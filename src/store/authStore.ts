@@ -16,13 +16,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user, isLoading: false }),
   fetchProfile: async (id) => {
     const supabase = createClient();
+    
+    // 1. Tentar buscar o perfil
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
-    if (data && !error) {
+    if (data) {
       set({
         user: {
           id: data.id,
@@ -37,7 +39,22 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
       });
     } else {
-      set({ isLoading: false });
+      // 2. Fallback: Se o perfil não existir (ex: Admin criado manualmente no Supabase),
+      // pegamos os dados direto do Auth para não travar o sistema.
+      const { data: authData } = await supabase.auth.getUser();
+      if (authData.user) {
+         set({
+           user: {
+             id: authData.user.id,
+             name: 'Administrador', // Fallback genérico
+             email: authData.user.email || '',
+             role: authData.user.email === 'albertinhorss@gmail.com' ? 'ADMIN' : 'CLIENT',
+           },
+           isLoading: false
+         });
+      } else {
+         set({ isLoading: false });
+      }
     }
   },
   logout: async () => {
