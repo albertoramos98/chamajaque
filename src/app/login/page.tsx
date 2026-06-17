@@ -47,6 +47,13 @@ export default function LoginPage() {
 
       toast.success(`Bem-vindo de volta!`);
       const userRole = profile?.role || role;
+      
+      // Lógica de redirecionamento especial para o Admin Principal
+      if (email === "albertinhorss@gmail.com") {
+        router.push("/dashboard/admin");
+        return;
+      }
+
       router.push(userRole === "CLIENT" ? "/dashboard/client" : "/dashboard/professional");
     } catch (error: any) {
       toast.error(error.message || "Erro ao entrar. Verifique suas credenciais.");
