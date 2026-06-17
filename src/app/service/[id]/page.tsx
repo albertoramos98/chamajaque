@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { ServiceStatus } from "@/types";
+import PaymentButton from "@/components/PaymentButton";
 
 export default function ServicePage() {
   const { id } = useParams();
@@ -214,10 +215,19 @@ export default function ServicePage() {
                     Finalizar Serviço
                  </Button>
                )}
-               {isClient && service.status === 'COMPLETED' && (
-                  <Button className="w-full h-14 bg-orange-600 hover:bg-orange-700 rounded-full text-lg font-bold">
-                    Avaliar Serviço
-                  </Button>
+               {isClient && (service.status === 'COMPLETED' || service.status === 'ACCEPTED' || service.status === 'IN_PROGRESS') && (
+                  <div className="space-y-3">
+                    <PaymentButton 
+                      serviceId={service.id} 
+                      title={`Faxina ChamaJaque - #${service.id}`} 
+                      price={service.estimatedValue} 
+                    />
+                    {service.status === 'COMPLETED' && (
+                      <Button variant="outline" className="w-full h-14 rounded-full text-lg font-bold">
+                        Avaliar Serviço
+                      </Button>
+                    )}
+                  </div>
                )}
             </div>
           </div>
