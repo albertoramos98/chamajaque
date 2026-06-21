@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Heart } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 export default function Footer() {
   return (
@@ -7,8 +8,8 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="text-2xl font-bold tracking-tight text-slate-900 mb-4 block">
-              Chama<span className="text-primary">Jaque</span>
+            <Link href="/" className="mb-4 block">
+              <Logo size={36} />
             </Link>
             <p className="text-slate-600 max-w-sm">
               Conectando lares brasileiros às melhores profissionais com respeito, 

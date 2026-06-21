@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Sparkles, ArrowRight, User as UserIcon, Briefcase, Loader2 } from "lucide-react";
+import { ArrowRight, User as UserIcon, Briefcase, Loader2 } from "lucide-react";
+import { LogoIcon } from "@/components/ui/Logo";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -67,9 +68,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-2xl border-none">
         <CardHeader className="text-center space-y-2">
           <div className="flex justify-center mb-2">
-            <div className="bg-primary p-2 rounded-xl text-white">
-              <Sparkles className="w-6 h-6" />
-            </div>
+            <LogoIcon size={48} />
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight">Acesse sua conta</CardTitle>
           <CardDescription>Bem-vindo ao Chama Jaque</CardDescription>

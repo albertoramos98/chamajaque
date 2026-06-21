@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/authStore';
-import { Sparkles, User as UserIcon, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 import { useEffect, useState } from 'react';
 
@@ -19,13 +20,8 @@ export default function Navbar() {
     return (
       <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="bg-slate-50 p-1.5 rounded-lg">
-              <Sparkles className="text-primary w-5 h-5" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">
-              Chama<span className="text-primary">Jaque</span>
-            </span>
+          <Link href="/" className="flex items-center group">
+            <Logo size={34} />
           </Link>
           <div className="w-20 h-8 bg-slate-100 animate-pulse rounded-full"></div>
         </div>
@@ -36,13 +32,8 @@ export default function Navbar() {
   return (
     <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="bg-primary p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
-            <Sparkles className="text-white w-5 h-5" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900">
-            Chama<span className="text-primary">Jaque</span>
-          </span>
+        <Link href="/" className="flex items-center group">
+          <Logo size={34} />
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
