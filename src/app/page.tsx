@@ -21,12 +21,7 @@ export default function LandingPage() {
       <section className="relative overflow-hidden bg-[#FFF9F9] pt-16 pb-24 md:pt-24 md:pb-32">
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row items-center gap-16">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="flex-1 space-y-8"
-            >
+            <div className="flex-1 space-y-8 animate-in fade-in duration-700 slide-in-from-bottom-5">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold">
                 <Heart className="w-4 h-4 fill-primary" />
                 <span>O cuidado que sua casa merece</span>
@@ -66,14 +61,9 @@ export default function LandingPage() {
                   <p className="text-slate-500 font-medium">+5.000 limpezas realizadas</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex-1 relative"
-            >
+            <div className="flex-1 relative animate-in fade-in duration-700 zoom-in-95 delay-150">
               <div className="relative w-full aspect-[4/5] max-w-[480px] mx-auto">
                 <div className="absolute inset-0 bg-primary/5 rounded-[2.5rem] -rotate-6"></div>
                 <div className="absolute inset-0 bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border-[12px] border-white">
@@ -95,7 +85,7 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -141,49 +131,66 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits / Social Proof */}
-      <section className="bg-slate-900 py-16 sm:py-32 text-white overflow-hidden rounded-3xl sm:rounded-[4rem] mx-4">
-        <div className="container mx-auto px-4">
+      <section className="relative bg-slate-950 py-20 sm:py-32 text-white overflow-hidden rounded-3xl sm:rounded-[4rem] mx-4 border border-slate-900 shadow-2xl">
+        {/* Glowing radial accents */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px] pointer-events-none"></div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="space-y-6 sm:space-y-10">
-              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+            <div className="space-y-8 sm:space-y-10">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.1] tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
                 Respeito e Valorização <br/>
-                <span className="text-primary italic">é o nosso DNA.</span>
+                <span className="text-primary italic font-serif">é o nosso DNA.</span>
               </h2>
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {[
-                  "Algoritmo de preço justo baseado em esforço real",
-                  "Termos de serviço claros que protegem a profissional",
-                  "Pagamento depositado integralmente e sem atrasos",
-                  "Comunidade focada em dignidade doméstica"
-                ].map((text, i) => (
-                  <div key={i} className="flex items-center gap-5">
-                    <div className="bg-primary p-1 rounded-full shrink-0">
-                      <CheckCircle2 className="w-5 h-5 text-white" />
+                  { text: "Algoritmo de preço justo baseado em esforço real", desc: "Calculamos o valor ideal considerando a metragem do imóvel, tipo de limpeza e esforço real." },
+                  { text: "Termos de serviço claros que protegem a profissional", desc: "Nossos termos garantem segurança jurídica e limites bem definidos para o trabalho doméstico." },
+                  { text: "Pagamento depositado integralmente e sem atrasos", desc: "Todo o dinheiro do serviço vai direto para quem trabalha, sem intermediários retendo comissões abusivas." },
+                  { text: "Comunidade focada em dignidade doméstica", desc: "Um ecossistema que valoriza as diaristas e promove respeito mútuo de igual para igual." }
+                ].map((item, i) => (
+                  <div key={i} className="group/item flex items-start gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04] hover:border-white/[0.08] transition-all duration-300">
+                    <div className="bg-primary/20 p-2 rounded-xl text-primary shrink-0 group-hover/item:scale-110 transition-transform">
+                      <CheckCircle2 className="w-5 h-5" />
                     </div>
-                    <span className="text-xl text-slate-300 font-medium">{text}</span>
+                    <div>
+                      <h4 className="text-lg font-bold text-white group-hover/item:text-primary transition-colors">{item.text}</h4>
+                      <p className="text-sm text-slate-400 mt-1 leading-relaxed">{item.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
-              <Button size="lg" className="bg-primary hover:opacity-90 border-none h-16 px-10 rounded-full font-bold text-lg">
-                Começar agora <ArrowRight className="ml-2 w-6 h-6" />
-              </Button>
+              <Link href="/register" className="inline-block">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white border-none h-14 px-8 rounded-full font-bold text-base shadow-xl shadow-primary/20 hover:shadow-primary/45 transition-all hover:scale-[1.02] active:scale-95 group/btn">
+                  Começar agora <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
             
             <div className="relative">
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
-                   {[
-                     { val: "98%", label: "Satisfação dos clientes" },
-                     { val: "+2k", label: "Profissionais parceiras" },
-                     { val: "R$ 180", label: "Ganhos médio p/ dia" },
-                     { val: "24/7", label: "Suporte humanizado" }
-                   ].map((stat, i) => (
-                     <div key={i} className={`bg-white/5 backdrop-blur-2xl p-6 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/10 ${i % 2 !== 0 ? 'sm:mt-12' : ''}`}>
-                       <p className="text-4xl sm:text-5xl font-bold text-primary mb-3">{stat.val}</p>
-                       <p className="text-slate-300 sm:text-slate-400 text-sm sm:text-lg font-medium">{stat.label}</p>
-                     </div>
-                   ))}
-                 </div>
+              {/* Background decorative glow directly behind the stats */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-blue-500/10 rounded-[3rem] blur-2xl pointer-events-none"></div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 relative z-10">
+                {[
+                  { val: "98%", label: "Satisfação dos clientes", desc: "Avaliação média baseada em feedbacks reais pós-faxina." },
+                  { val: "+2k", label: "Profissionais parceiras", desc: "Diaristas ativas e verificadas em nossa plataforma." },
+                  { val: "R$ 180", label: "Ganhos médios p/ dia", desc: "Remuneração justa que valoriza o esforço real diário." },
+                  { val: "24/7", label: "Suporte humanizado", desc: "Time dedicado para ajudar tanto clientes quanto profissionais." }
+                ].map((stat, i) => (
+                  <div 
+                    key={i} 
+                    className={`bg-white/[0.03] backdrop-blur-xl p-8 rounded-3xl border border-white/[0.08] shadow-2xl hover:border-primary/40 hover:bg-white/[0.06] transition-all duration-300 group/card ${i % 2 !== 0 ? 'sm:mt-10' : ''}`}
+                  >
+                    <p className="text-4xl sm:text-5xl font-black bg-gradient-to-br from-primary to-orange-400 bg-clip-text text-transparent mb-2 group-hover/card:scale-105 transition-transform origin-left duration-300">{stat.val}</p>
+                    <p className="text-slate-200 text-base font-bold mb-1">{stat.label}</p>
+                    <p className="text-slate-400 text-xs leading-relaxed">{stat.desc}</p>
+                  </div>
+                ))}
               </div>
+            </div>
           </div>
         </div>
       </section>
