@@ -31,7 +31,7 @@ export default function LandingPage() {
                 <Heart className="w-4 h-4 fill-primary" />
                 <span>O cuidado que sua casa merece</span>
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold text-slate-900 leading-[1.05] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-slate-900 leading-[1.05] tracking-tight">
                 Seu lar impecável, com <span className="text-primary">alma e respeito.</span>
               </h1>
               <p className="text-xl text-slate-600 max-w-lg leading-relaxed">
@@ -141,11 +141,11 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits / Social Proof */}
-      <section className="bg-slate-900 py-32 text-white overflow-hidden rounded-[4rem] mx-4">
+      <section className="bg-slate-900 py-16 sm:py-32 text-white overflow-hidden rounded-3xl sm:rounded-[4rem] mx-4">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-            <div className="space-y-10">
-              <h2 className="text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div className="space-y-6 sm:space-y-10">
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
                 Respeito e Valorização <br/>
                 <span className="text-primary italic">é o nosso DNA.</span>
               </h2>
@@ -170,38 +170,38 @@ export default function LandingPage() {
             </div>
             
             <div className="relative">
-               <div className="grid grid-cols-2 gap-8">
-                 {[
-                   { val: "98%", label: "Satisfação dos clientes" },
-                   { val: "+2k", label: "Profissionais parceiras" },
-                   { val: "R$ 180", label: "Ganhos médio p/ dia" },
-                   { val: "24/7", label: "Suporte humanizado" }
-                 ].map((stat, i) => (
-                   <div key={i} className={`bg-white/5 backdrop-blur-2xl p-10 rounded-[2.5rem] border border-white/10 ${i % 2 !== 0 ? 'mt-12' : ''}`}>
-                     <p className="text-5xl font-bold text-primary mb-3">{stat.val}</p>
-                     <p className="text-slate-400 text-lg font-medium">{stat.label}</p>
-                   </div>
-                 ))}
-               </div>
-            </div>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
+                   {[
+                     { val: "98%", label: "Satisfação dos clientes" },
+                     { val: "+2k", label: "Profissionais parceiras" },
+                     { val: "R$ 180", label: "Ganhos médio p/ dia" },
+                     { val: "24/7", label: "Suporte humanizado" }
+                   ].map((stat, i) => (
+                     <div key={i} className={`bg-white/5 backdrop-blur-2xl p-6 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/10 ${i % 2 !== 0 ? 'sm:mt-12' : ''}`}>
+                       <p className="text-4xl sm:text-5xl font-bold text-primary mb-3">{stat.val}</p>
+                       <p className="text-slate-300 sm:text-slate-400 text-sm sm:text-lg font-medium">{stat.label}</p>
+                     </div>
+                   ))}
+                 </div>
+              </div>
           </div>
         </div>
       </section>
 
       {/* CTA Final */}
       <section className="container mx-auto px-4">
-        <div className="bg-[#FFF9F9] border-2 border-primary/10 rounded-[4rem] p-16 md:p-28 text-center space-y-10 relative overflow-hidden">
+        <div className="bg-[#FFF9F9] border-2 border-primary/10 rounded-3xl sm:rounded-[4rem] p-8 sm:p-16 md:p-28 text-center space-y-6 sm:space-y-10 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -mr-48 -mt-48 blur-3xl"></div>
           
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-slate-900 relative z-10 max-w-4xl mx-auto leading-tight">
+          <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight text-slate-900 relative z-10 max-w-4xl mx-auto leading-tight">
             Pronto para sentir sua casa <span className="text-primary">renovada?</span>
           </h2>
-          <p className="text-2xl text-slate-500 relative z-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-2xl text-slate-500 relative z-10 max-w-2xl mx-auto leading-relaxed">
             Junte-se a milhares de lares brasileiros que já descobriram o poder de uma casa cuidada com carinho.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 relative z-10">
-            <Link href="/request">
-              <Button size="lg" className="bg-primary text-white hover:opacity-90 text-xl h-20 px-14 rounded-full font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 relative z-10">
+            <Link href="/request" className="w-full sm:w-auto">
+              <Button size="lg" className="bg-primary text-white hover:opacity-90 text-lg sm:text-xl h-16 sm:h-20 px-8 sm:px-14 rounded-full font-bold shadow-2xl shadow-primary/30 transition-all hover:scale-105 w-full sm:w-auto">
                 Agendar Faxina Agora
               </Button>
             </Link>

@@ -63,11 +63,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-orange-50/30">
+    <div className="min-h-[80vh] flex items-center justify-center p-4 bg-primary/5">
       <Card className="w-full max-w-md shadow-2xl border-none">
         <CardHeader className="text-center space-y-2">
           <div className="flex justify-center mb-2">
-            <div className="bg-orange-600 p-2 rounded-xl text-white">
+            <div className="bg-primary p-2 rounded-xl text-white">
               <Sparkles className="w-6 h-6" />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 className="h-12"
               />
             </div>
-            <Button type="submit" disabled={isLoading} className="w-full bg-orange-600 hover:bg-orange-700 h-12 text-lg rounded-full font-bold">
+            <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 h-12 text-lg rounded-full font-bold text-white">
               {isLoading ? (
                 <Loader2 className="w-6 h-6 animate-spin" />
               ) : (
@@ -121,7 +121,7 @@ export default function LoginPage() {
           <div className="text-center space-y-2">
              <p className="text-sm text-slate-500">
                Ainda não tem conta?{" "}
-               <Link href="/register" className="text-orange-600 font-bold hover:underline">
+               <Link href="/register" className="text-primary font-bold hover:underline">
                  Cadastre-se aqui
                </Link>
              </p>

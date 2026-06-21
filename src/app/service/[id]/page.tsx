@@ -84,9 +84,9 @@ export default function ServicePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <Card className="border-none shadow-sm overflow-hidden">
-               <div className="bg-orange-600 p-6 text-white flex justify-between items-center">
+               <div className="bg-primary p-6 text-white flex justify-between items-center">
                   <div>
-                    <p className="text-orange-100 text-xs font-bold uppercase tracking-wider">Status do Serviço</p>
+                    <p className="text-primary-foreground/80 text-xs font-bold uppercase tracking-wider">Status do Serviço</p>
                     <h2 className="text-2xl font-bold">{service.status}</h2>
                   </div>
                   <Badge className="bg-white/20 text-white border-none text-lg py-1 px-4">
@@ -94,22 +94,22 @@ export default function ServicePage() {
                   </Badge>
                </div>
                <CardContent className="p-8 space-y-6">
-                  <div className="flex flex-wrap gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-1">
                       <p className="text-xs text-slate-400 font-bold uppercase">Data e Hora</p>
                       <div className="flex items-center gap-2 font-bold">
-                        <Calendar className="w-4 h-4 text-orange-600" /> {service.scheduledDate}
+                        <Calendar className="w-4 h-4 text-primary" /> {service.scheduledDate}
                       </div>
                       <div className="flex items-center gap-2 font-bold">
-                        <Clock className="w-4 h-4 text-orange-600" /> {service.scheduledTime}
+                        <Clock className="w-4 h-4 text-primary" /> {service.scheduledTime}
                       </div>
                     </div>
                     <div className="space-y-1">
                       <p className="text-xs text-slate-400 font-bold uppercase">Localização</p>
                       <div className="flex items-center gap-2 font-bold">
-                        <MapPin className="w-4 h-4 text-orange-600" /> {service.address.neighborhood}
+                        <MapPin className="w-4 h-4 text-primary" /> {service.address.neighborhood}
                       </div>
-                      <p className="text-xs text-slate-500 pl-6">{service.address.street}, {service.address.number}</p>
+                      <p className="text-xs text-slate-500 pl-6 break-words">{service.address.street}, {service.address.number}</p>
                     </div>
                   </div>
 
@@ -183,18 +183,18 @@ export default function ServicePage() {
                <CardContent className="space-y-6">
                   <div className="flex justify-between items-end border-b pb-4">
                     <span className="text-slate-500 font-medium">Valor Estimado</span>
-                    <span className="text-2xl font-bold text-orange-600">R$ {service.estimatedValue}</span>
+                    <span className="text-2xl font-bold text-primary">R$ {service.estimatedValue}</span>
                   </div>
 
                   {prof ? (
                     <div className="space-y-4">
                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Sua Profissional</p>
                        <div className="flex items-center gap-3">
-                          <img src={prof.avatar} className="w-12 h-12 rounded-full border-2 border-orange-100" />
+                          <img src={prof.avatar} className="w-12 h-12 rounded-full border-2 border-primary/20" />
                           <div>
                              <p className="font-bold">{prof.name}</p>
-                             <div className="flex items-center gap-1 text-orange-500 text-xs">
-                                <Star className="w-3 h-3 fill-orange-500" /> {prof.rating}
+                             <div className="flex items-center gap-1 text-amber-500 text-xs">
+                                <Star className="w-3 h-3 fill-amber-500" /> {prof.rating}
                              </div>
                           </div>
                        </div>
@@ -216,7 +216,7 @@ export default function ServicePage() {
             {/* Actions */}
             <div className="space-y-3">
                {isProf && service.status === 'PENDING' && (
-                 <Button onClick={handleAccept} className="w-full h-14 bg-orange-600 hover:bg-orange-700 rounded-full text-lg font-bold shadow-lg shadow-orange-100">
+                 <Button onClick={handleAccept} className="w-full h-14 bg-primary hover:bg-primary/90 text-white rounded-full text-lg font-bold shadow-lg shadow-primary/10">
                     Aceitar Serviço
                  </Button>
                )}

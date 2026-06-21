@@ -66,11 +66,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[90vh] py-12 flex items-center justify-center p-4 bg-orange-50/30">
+    <div className="min-h-[90vh] py-12 flex items-center justify-center p-4 bg-primary/5">
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="hidden md:flex flex-col space-y-6">
           <h1 className="text-4xl font-bold leading-tight">
-            Junte-se à comunidade que valoriza o <span className="text-orange-600">cuidado</span>.
+            Junte-se à comunidade que valoriza o <span className="text-primary">cuidado</span>.
           </h1>
           <ul className="space-y-4">
             <li className="flex items-start gap-3">
@@ -97,7 +97,7 @@ export default function RegisterPage() {
         <Card className="shadow-2xl border-none">
           <CardHeader className="text-center space-y-2">
             <div className="flex justify-center mb-2">
-              <div className="bg-orange-600 p-2 rounded-xl text-white">
+              <div className="bg-primary p-2 rounded-xl text-white">
                 <Sparkles className="w-6 h-6" />
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function RegisterPage() {
                 e reconhece que a Chama Jaque é uma plataforma de intermediação baseada no respeito mútuo.
               </p>
 
-              <Button type="submit" disabled={isLoading} className="w-full bg-orange-600 hover:bg-orange-700 h-14 text-lg rounded-full font-bold">
+              <Button type="submit" disabled={isLoading} className="w-full bg-primary hover:bg-primary/90 h-14 text-lg rounded-full font-bold text-white">
                 {isLoading ? (
                   <Loader2 className="w-6 h-6 animate-spin" />
                 ) : (
@@ -164,7 +164,7 @@ export default function RegisterPage() {
             <div className="text-center">
               <p className="text-sm text-slate-500">
                 Já tem uma conta?{" "}
-                <Link href="/login" className="text-orange-600 font-bold hover:underline">
+                <Link href="/login" className="text-primary font-bold hover:underline">
                   Faça login
                 </Link>
               </p>

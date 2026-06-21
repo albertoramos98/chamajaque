@@ -69,17 +69,17 @@ function MatchContent() {
         <Card className="bg-white border-none shadow-sm">
           <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="bg-orange-100 p-2 rounded-lg">
-                <Clock className="w-5 h-5 text-orange-600" />
+              <div className="bg-primary/10 p-2 rounded-lg">
+                <Clock className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm font-bold">{request.scheduledDate} às {request.scheduledTime}</p>
                 <p className="text-xs text-slate-500">{request.details.propertyType} • {request.details.size}m² • {request.details.cleaningLevel}</p>
               </div>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Valor Sugerido</p>
-              <p className="text-xl font-bold text-orange-600">R$ {request.estimatedValue}</p>
+              <p className="text-xl font-bold text-primary">R$ {request.estimatedValue}</p>
             </div>
           </CardContent>
         </Card>
@@ -103,8 +103,8 @@ function MatchContent() {
                       </Avatar>
                       <div>
                         <h3 className="font-bold text-lg">{prof.name}</h3>
-                        <div className="flex items-center justify-center gap-1 text-orange-500">
-                          <Star className="w-4 h-4 fill-orange-500" />
+                        <div className="flex items-center justify-center gap-1 text-amber-500">
+                          <Star className="w-4 h-4 fill-amber-500" />
                           <span className="text-sm font-bold">{prof.rating}</span>
                           <span className="text-xs text-slate-400 font-normal">({prof.completedJobs})</span>
                         </div>
@@ -114,7 +114,7 @@ function MatchContent() {
                     <div className="md:w-3/4 p-6 space-y-4 relative">
                       <div className="flex flex-wrap gap-2">
                          {prof.specialties.map(s => (
-                           <Badge key={s} variant="secondary" className="bg-orange-50 text-orange-700 hover:bg-orange-100 border-none">
+                           <Badge key={s} variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none">
                              {s}
                            </Badge>
                          ))}
@@ -140,14 +140,14 @@ function MatchContent() {
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t">
                         <div className="flex items-baseline gap-1">
                           <span className="text-xl font-bold text-slate-900">R$ {prof.basePricePerHour}</span>
                           <span className="text-xs text-slate-400">/ hora</span>
                         </div>
                         <Button 
                           onClick={() => handleChoose(prof.id, prof.name)}
-                          className="bg-orange-600 hover:bg-orange-700 rounded-full px-6 group-hover:translate-x-1 transition-transform"
+                          className="bg-primary hover:bg-primary/90 text-white rounded-full px-6 group-hover:translate-x-1 transition-transform w-full sm:w-auto"
                         >
                           Escolher {prof.name.split(' ')[0]} <ChevronRight className="ml-1 w-4 h-4" />
                         </Button>

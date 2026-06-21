@@ -151,28 +151,28 @@ export default function AdminDashboard() {
     <div className="bg-slate-50 min-h-screen pb-20">
       {/* Top Bar - Admin Specific */}
       <div className="bg-slate-900 text-white py-4 mb-8">
-        <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
           <div className="flex items-center gap-2">
             <ShieldCheck className="text-primary w-5 h-5" />
-            <span className="font-bold tracking-tight">MODO ADMINISTRADOR</span>
+            <span className="font-bold tracking-tight text-sm sm:text-base">MODO ADMINISTRADOR</span>
           </div>
-          <div className="text-xs text-slate-400">
+          <div className="text-[10px] sm:text-xs text-slate-400">
             Sessão iniciada como: <span className="text-white font-mono">{user?.email}</span>
           </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 max-w-7xl space-y-8">
-        <div className="flex flex-col md:flex-row justify-between items-end gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">Visão Geral do Negócio</h1>
-            <p className="text-slate-500">Métricas de performance em tempo real do ChamaJaque.</p>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">Visão Geral do Negócio</h1>
+            <p className="text-slate-500 text-sm sm:text-base">Métricas de performance em tempo real do ChamaJaque.</p>
           </div>
-          <div className="flex gap-3">
-             <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none px-4 py-1">
+          <div className="flex flex-wrap gap-2">
+             <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none px-4 py-1 text-xs">
                 Servidores OK
              </Badge>
-             <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none px-4 py-1">
+             <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 border-none px-4 py-1 text-xs">
                 v1.2.0-stable
              </Badge>
           </div>
@@ -291,7 +291,8 @@ export default function AdminDashboard() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            {/* Tabela para Desktop */}
+            <div className="hidden sm:block overflow-x-auto">
               <table className="w-full text-sm text-left">
                 <thead>
                   <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase text-[10px] tracking-wider">
@@ -359,6 +360,63 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Cards para Mobile */}
+            <div className="block sm:hidden space-y-4">
+              {professionals.map((prof) => (
+                <div key={prof.id} className="p-4 border border-slate-100 rounded-xl bg-white space-y-3 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center font-bold text-primary text-xs">
+                         {prof.name[0]}
+                       </div>
+                       <div>
+                          <p className="font-bold text-slate-900 text-sm">{prof.name}</p>
+                          <p className="text-[10px] text-slate-400">{prof.email}</p>
+                       </div>
+                    </div>
+                    <Badge className={`
+                      ${prof.document_status === 'VERIFIED' ? 'bg-green-100 text-green-700' : 
+                        prof.document_status === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 
+                        'bg-amber-100 text-amber-700'} border-none text-[10px]
+                    `}>
+                      {prof.document_status === 'VERIFIED' ? 'Verificado' : 
+                       prof.document_status === 'REJECTED' ? 'Negado' : 'Pendente'}
+                    </Badge>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    <span className="font-semibold text-slate-700">Localização:</span> {prof.location || 'Não informado'}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 pt-2 border-t">
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="h-8 text-[9px] font-bold rounded-full border-blue-200 text-blue-600 hover:bg-blue-50"
+                       onClick={() => generateExpiringLink(prof.id)}
+                       disabled={generatingLink === prof.id}
+                     >
+                        {generatingLink === prof.id ? 'Gerando...' : 'Link 5 min'}
+                     </Button>
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="h-8 text-[10px] font-bold rounded-full border-green-200 text-green-600 hover:bg-green-50"
+                       onClick={() => handleVerify(prof.id, 'VERIFIED')}
+                     >
+                       Aprovar
+                     </Button>
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       className="h-8 text-[10px] font-bold rounded-full border-rose-200 text-rose-600 hover:bg-rose-50"
+                       onClick={() => handleVerify(prof.id, 'REJECTED')}
+                     >
+                       Negar
+                     </Button>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

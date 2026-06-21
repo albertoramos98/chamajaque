@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="text-2xl font-bold tracking-tight text-slate-900 mb-4 block">
-              Chama<span className="text-orange-600">Jaque</span>
+              Chama<span className="text-primary">Jaque</span>
             </Link>
             <p className="text-slate-600 max-w-sm">
               Conectando lares brasileiros às melhores profissionais com respeito, 

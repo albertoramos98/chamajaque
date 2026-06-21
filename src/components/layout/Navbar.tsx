@@ -70,10 +70,10 @@ export default function Navbar() {
           ) : (
             <>
               <Link href="/login">
-                <Button variant="ghost" className="text-slate-600">Entrar</Button>
+                <Button variant="ghost" className="text-slate-600 text-xs sm:text-sm px-2.5 sm:px-4">Entrar</Button>
               </Link>
               <Link href="/register">
-                <Button className="bg-primary hover:opacity-90 text-white rounded-full px-6 transition-opacity">
+                <Button className="bg-primary hover:opacity-90 text-white rounded-full text-xs sm:text-sm px-3 sm:px-6 transition-opacity">
                   Começar
                 </Button>
               </Link>

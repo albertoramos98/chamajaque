@@ -59,8 +59,9 @@ export default function ViewProfilePage() {
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-2xl">
-      <div className="bg-blue-600 text-white p-4 rounded-t-2xl flex items-center gap-2 text-sm font-bold">
-        <Clock className="w-4 h-4" /> VISUALIZAÇÃO TEMPORÁRIA (EXPIRA EM BREVE)
+      <div className="bg-blue-600 text-white p-4 rounded-t-2xl flex items-center gap-2 text-xs sm:text-sm font-bold">
+        <Clock className="w-4 h-4 shrink-0" />
+        <span>VISUALIZAÇÃO TEMPORÁRIA (EXPIRA EM BREVE)</span>
       </div>
       <Card className="border-none shadow-2xl rounded-t-none">
         <CardHeader className="text-center space-y-4">

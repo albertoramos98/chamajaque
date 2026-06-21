@@ -131,7 +131,7 @@ export default function RequestPage() {
                       Tipo de Imóvel
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-3 gap-4">
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                     {[
                       { id: 'APARTMENT', label: 'Apartamento', icon: <Building2 className="w-6 h-6" /> },
                       { id: 'HOUSE', label: 'Casa', icon: <Home className="w-6 h-6" /> },
@@ -140,7 +140,7 @@ export default function RequestPage() {
                       <button
                         key={type.id}
                         onClick={() => setDetails(d => ({ ...d, propertyType: type.id as PropertyType }))}
-                        className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                        className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all ${
                           details.propertyType === type.id 
                             ? 'border-primary bg-primary/5 text-primary' 
                             : 'border-slate-100 hover:border-primary/20 text-slate-500'
@@ -158,7 +158,7 @@ export default function RequestPage() {
                     <CardTitle>Detalhes e Tamanho</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div className="space-y-2">
                         <Label>Metragem aprox. (m²)</Label>
                         <Input 
@@ -186,7 +186,7 @@ export default function RequestPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                       <div className="space-y-2">
                         <Label>Quartos</Label>
                         <div className="flex items-center gap-4">
@@ -212,7 +212,7 @@ export default function RequestPage() {
                     <CardTitle>Serviços Adicionais</CardTitle>
                     <CardDescription>Turbine sua limpeza com tarefas extras</CardDescription>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-2 gap-4">
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     {[
                       { id: 'washing', label: 'Lavar Roupa' },
                       { id: 'ironing', label: 'Passar Roupa' },
@@ -259,12 +259,12 @@ export default function RequestPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="col-span-2 md:col-span-1 space-y-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                      <div className="space-y-2">
                         <Label>CEP</Label>
                         <Input placeholder="00000-000" className="h-12" value={address.zipCode} onChange={e => setAddress(a => ({ ...a, zipCode: e.target.value }))} />
                       </div>
-                      <div className="col-span-2 md:col-span-1 space-y-2">
+                      <div className="space-y-2">
                         <Label>Logradouro</Label>
                         <Input placeholder="Rua, Avenida..." className="h-12" value={address.street} onChange={e => setAddress(a => ({ ...a, street: e.target.value }))} />
                       </div>
@@ -278,7 +278,7 @@ export default function RequestPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-100">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-6 border-t border-slate-100">
                       <div className="space-y-2">
                         <Label>Data</Label>
                         <Input type="date" className="h-12" value={schedule.date} onChange={e => setSchedule(s => ({ ...s, date: e.target.value }))} />
@@ -357,19 +357,19 @@ export default function RequestPage() {
               <CardHeader className="bg-slate-900 text-white">
                 <CardTitle className="text-lg">Resumo do Serviço</CardTitle>
               </CardHeader>
-              <CardContent className="p-8 space-y-8">
+              <CardContent className="p-5 sm:p-8 space-y-6 sm:space-y-8">
                 <div className="flex justify-between items-center text-slate-600">
                   <div className="flex items-center gap-3">
                     <Clock className="w-5 h-5 text-primary" />
-                    <span className="font-medium text-lg text-slate-900">Duração estimada:</span>
+                    <span className="font-medium text-base sm:text-lg text-slate-900">Duração estimada:</span>
                   </div>
-                  <span className="font-bold text-2xl text-slate-900">{estimate.duration}h</span>
+                  <span className="font-bold text-xl sm:text-2xl text-slate-900">{estimate.duration}h</span>
                 </div>
 
                 <div className="pt-6 border-t border-slate-100 space-y-3">
                   <div className="flex flex-col">
                     <span className="text-slate-400 font-bold uppercase text-[10px] tracking-widest mb-1">Valor Sugerido</span>
-                    <span className="text-5xl font-bold text-primary tracking-tighter">R$ {estimate.value}</span>
+                    <span className="text-4xl sm:text-5xl font-bold text-primary tracking-tighter">R$ {estimate.value}</span>
                   </div>
                   <p className="text-[11px] text-slate-400 italic leading-relaxed">
                     *Este valor é uma estimativa justa baseada em mercado e esforço. O acerto é feito diretamente com a profissional.

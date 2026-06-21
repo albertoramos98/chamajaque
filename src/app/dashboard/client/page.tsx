@@ -69,7 +69,7 @@ export default function ClientDashboard() {
             <p className="text-slate-500">Acompanhe suas solicitações e agendamentos.</p>
           </div>
           <Link href="/request">
-            <Button className="bg-orange-600 hover:bg-orange-700 rounded-full h-12 px-6 shadow-lg shadow-orange-200">
+            <Button className="bg-primary hover:bg-primary/90 text-white rounded-full h-12 px-6 shadow-lg shadow-primary/20">
               <Plus className="w-5 h-5 mr-2" /> Nova Solicitação
             </Button>
           </Link>
@@ -94,7 +94,7 @@ export default function ClientDashboard() {
                     <p className="text-slate-500 max-w-xs mx-auto text-sm">Que tal agendar sua primeira faxina agora mesmo e ganhar tempo livre?</p>
                   </div>
                   <Link href="/request" className="inline-block">
-                    <Button variant="outline" className="rounded-full border-orange-200 text-orange-600 hover:bg-orange-50">
+                    <Button variant="outline" className="rounded-full border-primary/20 text-primary hover:bg-primary/5">
                       Agendar agora
                     </Button>
                   </Link>
@@ -117,11 +117,11 @@ export default function ClientDashboard() {
                                   <Clock className="w-6 h-6 text-slate-600" />
                                 </div>
                                 <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <h3 className="font-bold text-lg">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <h3 className="font-bold text-base sm:text-lg">
                                       {req.scheduledDate} às {req.scheduledTime}
                                     </h3>
-                                    <Badge className={`${config.color} border-none`}>{config.label}</Badge>
+                                    <Badge className={`${config.color} border-none text-[10px] sm:text-xs`}>{config.label}</Badge>
                                   </div>
                                   <div className="text-sm text-slate-500 flex items-center gap-1">
                                     <MapPin className="w-3.5 h-3.5" />
@@ -152,13 +152,13 @@ export default function ClientDashboard() {
                                 )}
                                 <div className="text-right">
                                   <p className="text-xs text-slate-400 font-medium uppercase">Valor</p>
-                                  <p className="text-lg font-bold text-orange-600">R$ {req.estimatedValue}</p>
+                                  <p className="text-lg font-bold text-primary">R$ {req.estimatedValue}</p>
                                 </div>
                               </div>
                             </div>
                             <div className="mt-4 pt-4 border-t flex justify-between items-center text-xs text-slate-400">
                                <span>ID: #{req.id}</span>
-                               <span className="flex items-center gap-1 group-hover:text-orange-600 font-bold transition-colors">
+                               <span className="flex items-center gap-1 group-hover:text-primary font-bold transition-colors">
                                  Ver detalhes <ChevronRight className="w-4 h-4" />
                                </span>
                             </div>
@@ -176,7 +176,7 @@ export default function ClientDashboard() {
           <div className="space-y-6">
             <Card className="bg-white shadow-sm border-none">
               <CardHeader className="text-center pb-2">
-                <Avatar className="w-20 h-20 mx-auto border-4 border-orange-50 mb-2">
+                <Avatar className="w-20 h-20 mx-auto border-4 border-primary/10 mb-2">
                   <AvatarImage src={user.avatar} />
                   <AvatarFallback>{user.name[0]}</AvatarFallback>
                 </Avatar>
@@ -198,10 +198,10 @@ export default function ClientDashboard() {
               </CardContent>
             </Card>
 
-            <div className="bg-orange-600 p-8 rounded-3xl text-white space-y-4 shadow-xl shadow-orange-100">
+            <div className="bg-primary p-6 sm:p-8 rounded-3xl text-white space-y-4 shadow-xl shadow-primary/20">
                <h3 className="text-xl font-bold leading-tight">Ganhe R$20 de desconto!</h3>
-               <p className="text-orange-100 text-sm">Indique a Jaque para um amigo e ambos ganham créditos na próxima faxina.</p>
-               <Button className="w-full bg-white text-orange-600 hover:bg-orange-50 font-bold rounded-full">Indicar agora</Button>
+               <p className="text-primary-foreground/90 text-sm">Indique a Jaque para um amigo e ambos ganham créditos na próxima faxina.</p>
+               <Button className="w-full bg-white text-primary hover:bg-primary/5 font-bold rounded-full border-none">Indicar agora</Button>
             </div>
           </div>
         </div>

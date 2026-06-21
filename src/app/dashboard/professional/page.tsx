@@ -85,13 +85,13 @@ export default function ProfessionalDashboard() {
                             <p className="font-bold">{job.scheduledDate}</p>
                             <p className="text-sm text-slate-500">{job.scheduledTime} • ~{job.estimatedDuration}h</p>
                           </div>
-                          <p className="text-xl font-bold text-orange-600">R$ {job.estimatedValue}</p>
+                          <p className="text-xl font-bold text-primary">R$ {job.estimatedValue}</p>
                         </div>
                         <div className="flex items-center gap-1 text-sm text-slate-600">
                           <MapPin className="w-4 h-4" /> {job.address.neighborhood}
                         </div>
                         <Link href={`/service/${job.id}`}>
-                          <Button className="w-full bg-orange-600 hover:bg-orange-700 rounded-full mt-2">
+                          <Button className="w-full bg-primary hover:bg-primary/90 text-white rounded-full mt-2">
                             Ver Detalhes
                           </Button>
                         </Link>
@@ -114,22 +114,22 @@ export default function ProfessionalDashboard() {
                 ) : (
                   myServices.map(service => (
                     <Card key={service.id} className="hover:shadow-md transition-shadow">
-                      <CardContent className="p-4 flex items-center justify-between">
+                      <CardContent className="p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                          <div className="flex items-center gap-4">
-                            <div className="bg-blue-50 p-3 rounded-xl">
+                            <div className="bg-blue-50 p-3 rounded-xl shrink-0">
                               <Clock className="w-5 h-5 text-blue-600" />
                             </div>
-                            <div>
-                               <p className="font-bold">{service.scheduledDate} às {service.scheduledTime}</p>
-                               <p className="text-xs text-slate-500">{service.address.street}, {service.address.number}</p>
+                            <div className="min-w-0">
+                               <p className="font-bold text-sm sm:text-base">{service.scheduledDate} às {service.scheduledTime}</p>
+                               <p className="text-xs text-slate-500 truncate">{service.address.street}, {service.address.number}</p>
                             </div>
                          </div>
-                         <div className="flex items-center gap-4">
-                            <Badge className={service.status === 'COMPLETED' ? 'bg-slate-100 text-slate-600' : 'bg-blue-100 text-blue-700'}>
+                         <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-none pt-3 sm:pt-0">
+                            <Badge className={service.status === 'COMPLETED' ? 'bg-slate-100 text-slate-600 border-none' : 'bg-blue-100 text-blue-700 border-none'}>
                               {service.status}
                             </Badge>
                             <Link href={`/service/${service.id}`}>
-                              <Button variant="ghost" size="icon"><ArrowUpRight className="w-5 h-5" /></Button>
+                              <Button variant="ghost" size="icon" className="text-slate-500"><ArrowUpRight className="w-5 h-5" /></Button>
                             </Link>
                          </div>
                       </CardContent>
@@ -143,7 +143,7 @@ export default function ProfessionalDashboard() {
           {/* Sidebar */}
           <div className="space-y-6">
             <Card className="bg-white shadow-sm border-none overflow-hidden">
-               <div className="bg-orange-600 h-20"></div>
+               <div className="bg-primary h-20"></div>
                <div className="px-6 pb-6 -mt-10 text-center space-y-4">
                   <Avatar className="w-20 h-20 mx-auto border-4 border-white">
                     <AvatarImage src={user.avatar} />
@@ -151,8 +151,8 @@ export default function ProfessionalDashboard() {
                   </Avatar>
                   <div>
                     <CardTitle>{user.name}</CardTitle>
-                    <div className="flex items-center justify-center gap-1 text-orange-500 mt-1">
-                      <Star className="w-4 h-4 fill-orange-500" />
+                    <div className="flex items-center justify-center gap-1 text-amber-500 mt-1">
+                      <Star className="w-4 h-4 fill-amber-500" />
                       <span className="text-sm font-bold">4.9</span>
                       <span className="text-xs text-slate-400 font-normal">(124 serviços)</span>
                     </div>
